@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rails',        '~> 5.1.6'
+# 日本語化
+gem 'rails-i18n' 
 gem 'bcrypt'
 gem 'faker'
 gem 'bootstrap-sass'
