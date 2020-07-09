@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
   
+  def index
+  end
+  
   def show
     @user = User.find(params[:id])
   end
@@ -21,6 +24,11 @@ class UsersController < ApplicationController
   
   def edit
     @user = User.find(params[:id])
+    case @user.id
+    when 1, 2, 3
+      flash[:danger] = "このユーザーは編集できません。"
+      redirect_to @user
+    end
   end
    
   def update
