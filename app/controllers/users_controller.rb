@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i(show edit update destroy)
-  before_action :logged_in_user, only: %i(index, show, edit, update, destroy)
+  before_action :logged_in_user, only: %i(index show edit update destroy)
+  before_action :admin_user, only: %i(index destroy)
   before_action :correct_user, only: %i(edit update)
   before_action :admin_or_correct, only: %i(show)
   
@@ -12,6 +13,10 @@ class UsersController < ApplicationController
   end
 
   def new
+    if logged_in? && !current_user.admin?
+      flash[:info] = 'すでにログインしています。'
+      redirect_to current_user
+    end
     @user = User.new
   end
   
@@ -27,11 +32,6 @@ class UsersController < ApplicationController
   end
   
   def edit
-    case @user.id
-    when 1, 2, 3
-      flash[:danger] = "このユーザーは編集できません。"
-      redirect_to @user
-    end
   end
    
   def update
@@ -44,15 +44,9 @@ class UsersController < ApplicationController
   end
   
   def destroy
-    case @user.id
-    when 1, 2, 3
-      flash[:danger] = "このユーザーは削除できません。"
-      redirect_to users_url
-    else
-      @user.destroy
-      flash[:success] = "#{@user.name}のデータを削除しました。"
-      redirect_to users_url
-    end
+    @user.destroy
+    flash[:success] = "#{@user.name}のデータを削除しました。"
+    redirect_to users_url
   end
   
   private
@@ -60,28 +54,4 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
-    
-    def set_user
-      @user = User.find(params[:id])
-    end
-  
-    def logged_in_user
-      unless logged_in?
-        flash[:danger] = "ログインしてください。"
-        redirect_to login_url
-      end
-    end
-    
-    # 現ログインユーザーであるか
-  def correct_user
-    redirect_to root_url unless current_user?(@user)
-  end
-  
-  # @userが定義されている上で使用する
-  def admin_or_correct
-    unless current_user?(@user) || current_user.admin?
-      flash[:danger] = "権限がありません。"
-      redirect_to root_url
-    end  
-  end
 end

@@ -7,15 +7,7 @@
       <h1 id="top-main-title">TaskApp</h1>
       <p>TaskAppは簡易ToDo管理ツールです。</p>
       <p>↓↓初めてのご利用↓↓</p>
-      <% if logged_in? %>
-        <%= link_to "アカウント作成", signup_path, class: "btn btn-lg btn-success" %>
-      <% else %>
-        <%= link_to "アカウント作成", signup_path, class: "btn btn-lg btn-success" %>
-      <div style="margin-top: 10px;">  
-        <%= link_to "ゲストログイン（管理権限）", signup_path, class: "btn btn-danger" %>
-        <%= link_to "ゲストログイン（一般権限）", signup_path, class: "btn btn-warning" %>
-      </div>
-      <% end %>
+      <%= link_to "アカウント作成", signup_path, class: "btn btn-lg btn-success" %>
     </div>
   </div>
 
