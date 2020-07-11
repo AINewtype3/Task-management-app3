@@ -10,7 +10,7 @@ class TasksController < ApplicationController
   end
   
   def index
-    @tasks = @user.tasks
+    @tasks = @user.tasks.order(created_at: :desc)
   end
   
   def show
